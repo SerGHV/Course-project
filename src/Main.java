@@ -1,5 +1,15 @@
+import database.DBConnection;
+
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Spare Parts Management System");
+
+        DBConnection db = new DBConnection();
+
+        if (db.getConnection() != null) {
+            System.out.println("SUCCESS");
+        } else {
+            System.out.println("FAILED");
+        }
     }
 }
