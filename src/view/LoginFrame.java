@@ -18,11 +18,11 @@ public class LoginFrame extends JFrame {
 
         JPanel panel = new JPanel(new GridLayout(3,2,10,10));
 
-        panel.add(new JLabel("Login:"));
+        panel.add(new JLabel("   Login:"));
         loginField = new JTextField();
         panel.add(loginField);
 
-        panel.add(new JLabel("Password:"));
+        panel.add(new JLabel("   Password:"));
         passwordField = new JPasswordField();
         panel.add(passwordField);
 

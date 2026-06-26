@@ -1,10 +1,13 @@
+import controller.LoginController;
+import model.User;
+
 import view.LoginFrame;
 import view.MainFrame;
 import view.SupplierPanel;
 import view.PartPanel;
-
-import controller.LoginController;
-import model.User;
+import view.PricePanel;
+import view.DeliveryPanel;
+import view.DeliveryItemPanel;
 
 import javax.swing.*;
 
@@ -24,7 +27,7 @@ public class Main {
 
             if (user != null) {
 
-                JOptionPane.showMessageDialog(null, "Success!");
+                JOptionPane.showMessageDialog(frame, "Success!");
 
                 frame.dispose();
 
@@ -32,9 +35,18 @@ public class Main {
 
                 mainFrame.getTabbedPane().addTab("Suppliers", new SupplierPanel());
                 mainFrame.getTabbedPane().addTab("Parts", new PartPanel());
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Invalid login or password");
+                mainFrame.getTabbedPane().addTab("Prices", new PricePanel());
+                mainFrame.getTabbedPane().addTab("Deliveries", new DeliveryPanel());
+                mainFrame.getTabbedPane().addTab("Delivery Items", new DeliveryItemPanel());
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Invalid login or password",
+                        "Authorization",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         });
     }
