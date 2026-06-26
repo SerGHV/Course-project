@@ -1,7 +1,13 @@
 package view;
 
+import controller.DeliveryController;
 import controller.DeliveryItemController;
+import controller.PartController;
+import controller.PriceController;
+import model.Delivery;
 import model.DeliveryItem;
+import model.Part;
+import model.Price;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,98 +17,84 @@ import java.util.List;
 public class DeliveryItemPanel extends JPanel {
 
     private DeliveryItemController controller;
-
     private JTable table;
     private DefaultTableModel model;
+    private JButton loadButton, addButton, deleteButton;
+    private JComboBox<Delivery> deliveryBox;
+    private JComboBox<Price> priceBox;
+    private JComboBox<Part> partBox;
 
-    private JButton loadButton;
-    private JButton addButton;
-    private JButton deleteButton;
-
-    public DeliveryItemPanel(){
-
-        controller=new DeliveryItemController();
-
+    public DeliveryItemPanel() {
+        controller = new DeliveryItemController();
         setLayout(new BorderLayout());
 
-        model=new DefaultTableModel(
-                new String[]{
-                        "ID",
-                        "Delivery",
-                        "Price",
-                        "Part",
-                        "Quantity"
-                },0);
+        deliveryBox = new JComboBox<>();
+        priceBox = new JComboBox<>();
+        partBox = new JComboBox<>();
 
-        table=new JTable(model);
+        DeliveryController dc = new DeliveryController();
+        PriceController pc = new PriceController();
+        PartController partC = new PartController();
+        for (Delivery d : dc.getAllDeliveries()) deliveryBox.addItem(d);
+        for (Price p : pc.getAllPrices()) priceBox.addItem(p);
+        for (Part p : partC.getAllParts()) partBox.addItem(p);
 
-        JPanel buttons=new JPanel();
+        model = new DefaultTableModel(new String[]{"ID", "Delivery", "Price", "Part", "Quantity"}, 0);
+        table = new JTable(model);
 
-        loadButton=new JButton("Load");
-        addButton=new JButton("Add");
-        deleteButton=new JButton("Delete");
+        JPanel top = new JPanel();
+        top.add(new JLabel("Delivery:"));
+        top.add(deliveryBox);
+        top.add(new JLabel("Price:"));
+        top.add(priceBox);
+        top.add(new JLabel("Part:"));
+        top.add(partBox);
 
+        JPanel buttons = new JPanel();
+        loadButton = new JButton("Load");
+        addButton = new JButton("Add");
+        deleteButton = new JButton("Delete");
         buttons.add(loadButton);
         buttons.add(addButton);
         buttons.add(deleteButton);
 
-        add(new JScrollPane(table),BorderLayout.CENTER);
-        add(buttons,BorderLayout.SOUTH);
+        add(top, BorderLayout.NORTH);
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        add(buttons, BorderLayout.SOUTH);
 
-        loadButton.addActionListener(e->loadData());
+        loadButton.addActionListener(e -> loadData());
 
-        addButton.addActionListener(e->{
-
-            DeliveryItem item=new DeliveryItem();
-
-            item.setDeliveryId(Integer.parseInt(JOptionPane.showInputDialog("Delivery ID")));
-
-            item.setPriceId(Integer.parseInt(JOptionPane.showInputDialog("Price ID")));
-
-            item.setPartId(Integer.parseInt(JOptionPane.showInputDialog("Part ID")));
-
-            item.setQuantity(Integer.parseInt(JOptionPane.showInputDialog("Quantity")));
-
+        addButton.addActionListener(e -> {
+            Delivery d = (Delivery) deliveryBox.getSelectedItem();
+            Price price = (Price) priceBox.getSelectedItem();
+            Part part = (Part) partBox.getSelectedItem();
+            if (d == null || price == null || part == null) return;
+            String qtyStr = JOptionPane.showInputDialog("Quantity");
+            if (qtyStr == null || qtyStr.isBlank()) return;
+            DeliveryItem item = new DeliveryItem();
+            item.setDeliveryId(d.getDeliveryId());
+            item.setPriceId(price.getPriceId());
+            item.setPartId(part.getPartId());
+            item.setQuantity(Integer.parseInt(qtyStr));
             controller.addDeliveryItem(item);
-
             loadData();
-
         });
 
-        deleteButton.addActionListener(e->{
-
-            int row=table.getSelectedRow();
-
-            if(row>=0){
-
-                controller.deleteDeliveryItem((Integer)model.getValueAt(row,0));
-
+        deleteButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row >= 0) {
+                int id = (Integer) model.getValueAt(row, 0);
+                controller.deleteDeliveryItem(id);
                 loadData();
-
             }
-
         });
-
     }
 
-    private void loadData(){
-
+    private void loadData() {
         model.setRowCount(0);
-
-        List<DeliveryItem> list=controller.getAllDeliveryItems();
-
-        for(DeliveryItem item:list){
-
-            model.addRow(new Object[]{
-                    item.getDeliveryItemId(),
-                    item.getDeliveryId(),
-                    item.getPriceId(),
-                    item.getPartId(),
-                    item.getQuantity()
-            });
-
+        List<DeliveryItem> items = controller.getAllDeliveryItems();
+        for (DeliveryItem item : items) {
+            model.addRow(new Object[]{item.getDeliveryItemId(), item.getDeliveryId(), item.getPriceId(), item.getPartId(), item.getQuantity()});
         }
-
     }
-
 }

@@ -12,7 +12,7 @@ public class UserRepository {
     private Connection connection;
 
     public UserRepository() {
-        connection = new DBConnection().getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     public List<User> findAll() {

@@ -12,7 +12,7 @@ public class PartRepository {
     private Connection connection;
 
     public PartRepository() {
-        connection = new DBConnection().getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     public List<Part> findAll() {

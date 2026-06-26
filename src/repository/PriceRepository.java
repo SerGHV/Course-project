@@ -12,7 +12,7 @@ public class PriceRepository {
     private Connection connection;
 
     public PriceRepository() {
-        connection = new DBConnection().getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     public List<Price> findAll() {

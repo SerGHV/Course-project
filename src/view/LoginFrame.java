@@ -3,37 +3,32 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginFrame extends JFrame {
+public class LoginFrame extends JPanel {
 
     private JTextField loginField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private JButton goToRegisterButton;
 
-    public LoginFrame() {
+    public LoginFrame(AuthFrame parent) {
 
-        setTitle("Authorization");
-        setSize(350,200);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new GridLayout(4, 2, 10, 10));
 
-        JPanel panel = new JPanel(new GridLayout(3,2,10,10));
-
-        panel.add(new JLabel("   Login:"));
+        add(new JLabel("  Login:"));
         loginField = new JTextField();
-        panel.add(loginField);
+        add(loginField);
 
-        panel.add(new JLabel("   Password:"));
+        add(new JLabel("  Password:"));
         passwordField = new JPasswordField();
-        panel.add(passwordField);
-
-        panel.add(new JLabel());
+        add(passwordField);
 
         loginButton = new JButton("Login");
-        panel.add(loginButton);
+        add(loginButton);
 
-        add(panel);
+        goToRegisterButton = new JButton("Register");
+        add(goToRegisterButton);
 
-        setVisible(true);
+        goToRegisterButton.addActionListener(e -> parent.showRegister());
     }
 
     public JTextField getLoginField() {

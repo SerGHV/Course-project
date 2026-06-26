@@ -1,13 +1,7 @@
+import view.AuthFrame;
 import controller.LoginController;
+import controller.RegisterController;
 import model.User;
-
-import view.LoginFrame;
-import view.MainFrame;
-import view.SupplierPanel;
-import view.PartPanel;
-import view.PricePanel;
-import view.DeliveryPanel;
-import view.DeliveryItemPanel;
 
 import javax.swing.*;
 
@@ -15,38 +9,43 @@ public class Main {
 
     public static void main(String[] args) {
 
-        LoginFrame frame = new LoginFrame();
-        LoginController controller = new LoginController();
+        AuthFrame auth = new AuthFrame();
 
-        frame.getLoginButton().addActionListener(e -> {
+        LoginController loginController = new LoginController();
+        RegisterController registerController = new RegisterController();
 
-            String login = frame.getLoginField().getText();
-            String password = new String(frame.getPasswordField().getPassword());
+        // LOGIN
+        auth.getLoginPanel().getLoginButton().addActionListener(e -> {
 
-            User user = controller.login(login, password);
+            String login = auth.getLoginPanel().getLoginField().getText();
+            String password = new String(auth.getLoginPanel().getPasswordField().getPassword());
+
+            User user = loginController.login(login, password);
 
             if (user != null) {
-
-                JOptionPane.showMessageDialog(frame, "Success!");
-
-                frame.dispose();
-
-                MainFrame mainFrame = new MainFrame();
-
-                mainFrame.getTabbedPane().addTab("Suppliers", new SupplierPanel());
-                mainFrame.getTabbedPane().addTab("Parts", new PartPanel());
-                mainFrame.getTabbedPane().addTab("Prices", new PricePanel());
-                mainFrame.getTabbedPane().addTab("Deliveries", new DeliveryPanel());
-                mainFrame.getTabbedPane().addTab("Delivery Items", new DeliveryItemPanel());
-
+                JOptionPane.showMessageDialog(null, "Success!");
+                auth.dispose();
+                // дальше MainFrame
             } else {
+                JOptionPane.showMessageDialog(null, "Invalid login/password");
+            }
+        });
 
-                JOptionPane.showMessageDialog(
-                        frame,
-                        "Invalid login or password",
-                        "Authorization",
-                        JOptionPane.ERROR_MESSAGE
-                );
+        // REGISTER
+        auth.getRegisterPanel().getRegisterButton().addActionListener(e -> {
+
+            String login = auth.getRegisterPanel().getLoginField().getText();
+            String fullName = auth.getRegisterPanel().getFullNameField().getText();
+            String password = new String(auth.getRegisterPanel().getPasswordField().getPassword());
+
+            boolean ok = registerController.register(login, fullName, password);
+
+            if (ok) {
+                JOptionPane.showMessageDialog(null, "Registered!");
+                auth.showLogin();
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Weak password!");
             }
         });
     }

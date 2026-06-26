@@ -43,4 +43,9 @@ public class Delivery {
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
+    @Override
+    public String toString() {
+        return "Delivery #" + deliveryId + " (" + deliveryDate + ")";
+    }
 }

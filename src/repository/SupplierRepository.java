@@ -12,7 +12,7 @@ public class SupplierRepository {
     private Connection connection;
 
     public SupplierRepository() {
-        connection = new DBConnection().getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     public List<Supplier> findAll() {

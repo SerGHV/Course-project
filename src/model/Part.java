@@ -38,4 +38,9 @@ public class Part {
     public void setArticleNumber(String articleNumber) {
         this.articleNumber = articleNumber;
     }
+
+    @Override
+    public String toString() {
+        return partName + " (" + articleNumber + ")";
+    }
 }

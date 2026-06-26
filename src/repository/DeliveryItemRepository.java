@@ -12,7 +12,7 @@ public class DeliveryItemRepository {
     private Connection connection;
 
     public DeliveryItemRepository() {
-        connection = new DBConnection().getConnection();
+        connection = DBConnection.getInstance().getConnection();
     }
 
     public List<DeliveryItem> findAll() {

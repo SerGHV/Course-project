@@ -66,4 +66,9 @@ public class Price {
     public void setPriceValue(BigDecimal priceValue) {
         this.priceValue = priceValue;
     }
+
+    @Override
+    public String toString() {
+        return "Price #" + priceId;
+    }
 }
