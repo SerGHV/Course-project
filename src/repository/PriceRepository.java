@@ -3,10 +3,7 @@ package repository;
 import database.DBConnection;
 import model.Price;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,66 +15,93 @@ public class PriceRepository {
         connection = new DBConnection().getConnection();
     }
 
-    public List<Price> getAllPrices() {
-
-        List<Price> prices = new ArrayList<>();
-
-        String sql = "SELECT * FROM prices ORDER BY price_date DESC";
-
-        try {
-
-            Statement statement = connection.createStatement();
-
-            ResultSet result = statement.executeQuery(sql);
-
-            while (result.next()) {
-
-                Price price = new Price();
-
-                price.setPriceId(result.getInt("price_id"));
-                price.setSupplierId(result.getInt("supplier_id"));
-                price.setPartId(result.getInt("part_id"));
-                price.setPriceDate(result.getDate("price_date"));
-                price.setPriceValue(result.getBigDecimal("price_value"));
-
-                prices.add(price);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return prices;
-    }
-
     public List<Price> findAll() {
 
-        List<Price> prices = new ArrayList<>();
+        List<Price> list = new ArrayList<>();
 
         String sql = "SELECT * FROM prices";
 
-        try {
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
+            while (rs.next()) {
 
-            while (result.next()) {
+                Price price = new Price();
 
-                Price price = new Price(
-                        result.getInt("price_id"),
-                        result.getInt("supplier_id"),
-                        result.getInt("part_id"),
-                        result.getDate("price_date"),
-                        result.getBigDecimal("price_value")
-                );
+                price.setPriceId(rs.getInt("price_id"));
+                price.setSupplierId(rs.getInt("supplier_id"));
+                price.setPartId(rs.getInt("part_id"));
+                price.setPriceDate(rs.getDate("price_date"));
+                price.setPriceValue(rs.getBigDecimal("price_value"));
 
-                prices.add(price);
+                list.add(price);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return prices;
+        return list;
+    }
+
+    public Price findById(int id) {
+
+        String sql = "SELECT * FROM prices WHERE price_id=?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return new Price(
+                        rs.getInt("price_id"),
+                        rs.getInt("supplier_id"),
+                        rs.getInt("part_id"),
+                        rs.getDate("price_date"),
+                        rs.getBigDecimal("price_value")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void save(Price price) {
+
+        String sql =
+                "INSERT INTO prices(supplier_id,part_id,price_date,price_value) VALUES(?,?,?,?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, price.getSupplierId());
+            ps.setInt(2, price.getPartId());
+            ps.setDate(3, price.getPriceDate());
+            ps.setBigDecimal(4, price.getPriceValue());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int id) {
+
+        String sql = "DELETE FROM prices WHERE price_id=?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

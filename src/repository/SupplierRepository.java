@@ -15,28 +15,23 @@ public class SupplierRepository {
         connection = new DBConnection().getConnection();
     }
 
-    public List<Supplier> getAllSuppliers() {
+    public List<Supplier> findAll() {
 
         List<Supplier> suppliers = new ArrayList<>();
 
         String sql = "SELECT * FROM suppliers ORDER BY supplier_name";
 
-        try {
-
-            Statement statement = connection.createStatement();
-
-            ResultSet result = statement.executeQuery(sql);
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
 
             while (result.next()) {
 
-                Supplier supplier = new Supplier();
-
-                supplier.setSupplierId(result.getInt("supplier_id"));
-                supplier.setSupplierName(result.getString("supplier_name"));
-                supplier.setAddress(result.getString("address"));
-                supplier.setPhoneNumber(result.getString("phone_number"));
-
-                suppliers.add(supplier);
+                suppliers.add(new Supplier(
+                        result.getInt("supplier_id"),
+                        result.getString("supplier_name"),
+                        result.getString("address"),
+                        result.getString("phone_number")
+                ));
             }
 
         } catch (SQLException e) {
@@ -46,33 +41,61 @@ public class SupplierRepository {
         return suppliers;
     }
 
-    public List<Supplier> findAll() {
+    public Supplier findById(int id) {
 
-        List<Supplier> suppliers = new ArrayList<>();
+        String sql = "SELECT * FROM suppliers WHERE supplier_id=?";
 
-        String sql = "SELECT * FROM suppliers";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-        try {
+            ps.setInt(1, id);
 
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
 
-            while (result.next()) {
+            if (rs.next()) {
 
-                Supplier supplier = new Supplier(
-                        result.getInt("supplier_id"),
-                        result.getString("supplier_name"),
-                        result.getString("address"),
-                        result.getString("phone_number")
+                return new Supplier(
+                        rs.getInt("supplier_id"),
+                        rs.getString("supplier_name"),
+                        rs.getString("address"),
+                        rs.getString("phone_number")
                 );
-
-                suppliers.add(supplier);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return suppliers;
+        return null;
+    }
+
+    public void save(Supplier supplier) {
+
+        String sql = "INSERT INTO suppliers (supplier_name, address, phone_number) VALUES (?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, supplier.getSupplierName());
+            ps.setString(2, supplier.getAddress());
+            ps.setString(3, supplier.getPhoneNumber());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int id) {
+
+        String sql = "DELETE FROM suppliers WHERE supplier_id=?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
