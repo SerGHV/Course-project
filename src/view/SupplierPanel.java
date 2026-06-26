@@ -95,7 +95,7 @@ public class SupplierPanel extends JPanel {
         supplier.setAddress(address);
         supplier.setPhoneNumber(phone);
 
-        controller.saveSupplier(supplier);
+        controller.addSupplier(supplier);
 
         loadData();
     }
