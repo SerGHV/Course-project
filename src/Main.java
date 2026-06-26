@@ -1,4 +1,7 @@
 import view.LoginFrame;
+import view.MainFrame;
+import view.SupplierPanel;
+
 import controller.LoginController;
 import model.User;
 
@@ -19,11 +22,14 @@ public class Main {
             User user = controller.login(login, password);
 
             if (user != null) {
+
                 JOptionPane.showMessageDialog(null, "Success!");
 
-                frame.dispose(); // закрыть login
+                frame.dispose();
 
-                new view.MainFrame(); // открыть главное окно
+                MainFrame mainFrame = new MainFrame();
+
+                mainFrame.getTabbedPane().addTab("Suppliers", new SupplierPanel());
             }
             else {
                 JOptionPane.showMessageDialog(null, "Invalid login or password");
