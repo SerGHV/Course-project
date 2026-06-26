@@ -1,15 +1,11 @@
-import database.DBConnection;
+import view.LoginFrame;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        DBConnection db = new DBConnection();
+        new LoginFrame();
 
-        if (db.getConnection() != null) {
-            System.out.println("SUCCESS");
-        } else {
-            System.out.println("FAILED");
-        }
     }
+
 }
