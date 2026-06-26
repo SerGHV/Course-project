@@ -47,4 +47,33 @@ public class DeliveryRepository {
 
         return deliveries;
     }
+
+    public List<Delivery> findAll() {
+
+        List<Delivery> deliveries = new ArrayList<>();
+
+        String sql = "SELECT * FROM deliveries";
+
+        try {
+
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+
+                Delivery delivery = new Delivery(
+                        result.getInt("delivery_id"),
+                        result.getInt("supplier_id"),
+                        result.getDate("delivery_date")
+                );
+
+                deliveries.add(delivery);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return deliveries;
+    }
 }

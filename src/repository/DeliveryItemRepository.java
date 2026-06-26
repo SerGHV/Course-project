@@ -49,4 +49,35 @@ public class DeliveryItemRepository {
 
         return deliveryItems;
     }
+
+    public List<DeliveryItem> findAll() {
+
+        List<DeliveryItem> items = new ArrayList<>();
+
+        String sql = "SELECT * FROM delivery_items";
+
+        try {
+
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+
+                DeliveryItem item = new DeliveryItem(
+                        result.getInt("delivery_item_id"),
+                        result.getInt("delivery_id"),
+                        result.getInt("price_id"),
+                        result.getInt("part_id"),
+                        result.getInt("quantity")
+                );
+
+                items.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return items;
+    }
 }
