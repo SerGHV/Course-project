@@ -20,7 +20,6 @@ public class LoginController {
         return userRepository.findByLoginAndPasswordHash(login, hash);
     }
 
-    // SHA-256 (упрощённый вариант для курсового)
     private String hashPassword(String password) {
 
         try {

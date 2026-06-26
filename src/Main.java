@@ -1,6 +1,7 @@
 import view.LoginFrame;
 import view.MainFrame;
 import view.SupplierPanel;
+import view.PartPanel;
 
 import controller.LoginController;
 import model.User;
@@ -30,6 +31,7 @@ public class Main {
                 MainFrame mainFrame = new MainFrame();
 
                 mainFrame.getTabbedPane().addTab("Suppliers", new SupplierPanel());
+                mainFrame.getTabbedPane().addTab("Parts", new PartPanel());
             }
             else {
                 JOptionPane.showMessageDialog(null, "Invalid login or password");

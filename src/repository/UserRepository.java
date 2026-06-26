@@ -49,7 +49,8 @@ public class UserRepository {
 
     public User findByLoginAndPasswordHash(String login, String passwordHash) {
 
-        String sql = "SELECT * FROM users WHERE login = ? AND password_hash = ?";
+        String sql = "SELECT * FROM users " +
+                "WHERE login = ? AND password_hash = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);

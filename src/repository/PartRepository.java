@@ -15,63 +15,30 @@ public class PartRepository {
         connection = new DBConnection().getConnection();
     }
 
-    public List<Part> getAllParts() {
-
-        List<Part> parts = new ArrayList<>();
-
-        String sql = "SELECT * FROM parts ORDER BY part_name";
-
-        try {
-
-            Statement statement = connection.createStatement();
-
-            ResultSet result = statement.executeQuery(sql);
-
-            while (result.next()) {
-
-                Part part = new Part();
-
-                part.setPartId(result.getInt("part_id"));
-                part.setPartName(result.getString("part_name"));
-                part.setArticleNumber(result.getString("article_number"));
-
-                parts.add(part);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return parts;
-    }
-
     public List<Part> findAll() {
 
-        List<Part> parts = new ArrayList<>();
+        List<Part> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM parts";
+        String sql = "SELECT part_id, part_name, article_number FROM parts";
 
-        try {
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
+            while (rs.next()) {
 
-            while (result.next()) {
+                Part p = new Part();
 
-                Part part = new Part(
-                        result.getInt("part_id"),
-                        result.getString("part_name"),
-                        result.getString("article_number")
-                );
+                p.setPartId(rs.getInt("part_id"));
+                p.setPartName(rs.getString("part_name"));
+                p.setArticleNumber(rs.getString("article_number"));
 
-                parts.add(part);
+                list.add(p);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return parts;
+        return list;
     }
-
 }
