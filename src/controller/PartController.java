@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PartController {
 
-    private final PartRepository repository;
+    private PartRepository repository;
 
     public PartController() {
         repository = new PartRepository();

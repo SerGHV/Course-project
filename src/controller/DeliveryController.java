@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DeliveryController {
 
-    private final DeliveryRepository repository;
+    private DeliveryRepository repository;
 
     public DeliveryController() {
         repository = new DeliveryRepository();

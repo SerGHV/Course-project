@@ -16,4 +16,16 @@ public class UserController {
     public List<User> getAllUsers() {
         return repository.findAll();
     }
+
+    public User getUserById(int id) {
+        return repository.findById(id);
+    }
+
+    public void addUser(User user) {
+        repository.save(user);
+    }
+
+    public void deleteUser(int id) {
+        repository.delete(id);
+    }
 }

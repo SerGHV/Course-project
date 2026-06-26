@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PriceController {
 
-    private final PriceRepository repository;
+    private PriceRepository repository;
 
     public PriceController() {
         repository = new PriceRepository();

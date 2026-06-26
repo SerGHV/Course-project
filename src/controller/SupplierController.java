@@ -21,7 +21,7 @@ public class SupplierController {
         return repository.findById(id);
     }
 
-    public void saveSupplier(Supplier supplier) {
+    public void addSupplier(Supplier supplier) {
         repository.save(supplier);
     }
 
