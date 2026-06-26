@@ -46,8 +46,7 @@ public class DeliveryItemRepository {
 
     public DeliveryItem findById(int id) {
 
-        String sql =
-                "SELECT * FROM delivery_items WHERE delivery_item_id=?";
+        String sql = "SELECT * FROM delivery_items WHERE delivery_item_id=?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -75,8 +74,11 @@ public class DeliveryItemRepository {
 
     public void save(DeliveryItem item) {
 
-        String sql =
-                "INSERT INTO delivery_items(delivery_id,price_id,part_id,quantity) VALUES(?,?,?,?)";
+        String sql = """
+            INSERT INTO delivery_items
+            (delivery_id,price_id,part_id,quantity)
+            VALUES (?,?,?,?)
+            """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -94,12 +96,12 @@ public class DeliveryItemRepository {
 
     public void delete(int id) {
 
-        String sql =
-                "DELETE FROM delivery_items WHERE delivery_item_id=?";
+        String sql = "DELETE FROM delivery_items WHERE delivery_item_id=?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+
             ps.executeUpdate();
 
         } catch (SQLException e) {

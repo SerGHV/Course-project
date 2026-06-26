@@ -74,8 +74,11 @@ public class PriceRepository {
 
     public void save(Price price) {
 
-        String sql =
-                "INSERT INTO prices(supplier_id,part_id,price_date,price_value) VALUES(?,?,?,?)";
+        String sql = """
+            INSERT INTO prices
+            (supplier_id,part_id,price_date,price_value)
+            VALUES (?,?,?,?)
+            """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -98,6 +101,7 @@ public class PriceRepository {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+
             ps.executeUpdate();
 
         } catch (SQLException e) {

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DeliveryItemController {
 
-    private DeliveryItemRepository repository;
+    private final DeliveryItemRepository repository;
 
     public DeliveryItemController() {
         repository = new DeliveryItemRepository();
@@ -15,5 +15,17 @@ public class DeliveryItemController {
 
     public List<DeliveryItem> getAllDeliveryItems() {
         return repository.findAll();
+    }
+
+    public DeliveryItem getDeliveryItemById(int id) {
+        return repository.findById(id);
+    }
+
+    public void addDeliveryItem(DeliveryItem item) {
+        repository.save(item);
+    }
+
+    public void deleteDeliveryItem(int id) {
+        repository.delete(id);
     }
 }

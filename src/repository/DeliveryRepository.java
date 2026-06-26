@@ -70,8 +70,11 @@ public class DeliveryRepository {
 
     public void save(Delivery delivery) {
 
-        String sql =
-                "INSERT INTO deliveries(supplier_id,delivery_date) VALUES(?,?)";
+        String sql = """
+            INSERT INTO deliveries
+            (supplier_id, delivery_date)
+            VALUES (?, ?)
+            """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -92,6 +95,7 @@ public class DeliveryRepository {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+
             ps.executeUpdate();
 
         } catch (SQLException e) {

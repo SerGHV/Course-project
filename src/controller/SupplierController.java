@@ -16,4 +16,16 @@ public class SupplierController {
     public List<Supplier> getAllSuppliers() {
         return repository.findAll();
     }
+
+    public Supplier getSupplierById(int id) {
+        return repository.findById(id);
+    }
+
+    public void saveSupplier(Supplier supplier) {
+        repository.save(supplier);
+    }
+
+    public void deleteSupplier(int id) {
+        repository.delete(id);
+    }
 }
