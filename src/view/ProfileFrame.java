@@ -26,13 +26,13 @@ public class ProfileFrame extends JFrame {
 
         JButton saveButton = new JButton("Save");
 
-        panel.add(new JLabel("Login"));
+        panel.add(new JLabel("  Login"));
         panel.add(loginField);
 
-        panel.add(new JLabel("Full name"));
+        panel.add(new JLabel("  Full name"));
         panel.add(fullNameField);
 
-        panel.add(new JLabel("New password"));
+        panel.add(new JLabel("  New password"));
         panel.add(passwordField);
 
         panel.add(new JLabel());
