@@ -28,4 +28,6 @@ public class PriceController {
     public void deletePrice(int id) {
         repository.delete(id);
     }
+
+    public void updatePrice(Price price) { repository.update(price); }
 }

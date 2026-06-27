@@ -108,4 +108,18 @@ public class PriceRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(Price price) {
+        String sql = "UPDATE prices SET supplier_id = ?, part_id = ?, price_date = ?, price_value = ? WHERE price_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, price.getSupplierId());
+            ps.setInt(2, price.getPartId());
+            ps.setDate(3, price.getPriceDate());
+            ps.setBigDecimal(4, price.getPriceValue());
+            ps.setInt(5, price.getPriceId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

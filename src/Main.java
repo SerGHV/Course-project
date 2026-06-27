@@ -2,7 +2,8 @@ import view.AuthFrame;
 import controller.LoginController;
 import controller.RegisterController;
 import model.User;
-
+import view.MainFrame;
+import database.DBConnection;
 import javax.swing.*;
 
 public class Main {
@@ -14,7 +15,6 @@ public class Main {
         LoginController loginController = new LoginController();
         RegisterController registerController = new RegisterController();
 
-        // LOGIN
         auth.getLoginPanel().getLoginButton().addActionListener(e -> {
 
             String login = auth.getLoginPanel().getLoginField().getText();
@@ -23,15 +23,25 @@ public class Main {
             User user = loginController.login(login, password);
 
             if (user != null) {
-                JOptionPane.showMessageDialog(null, "Success!");
+
+                JOptionPane.showMessageDialog(null, "Welcome, " + user.getFullName() + "!");
+
                 auth.dispose();
-                // дальше MainFrame
+
+                MainFrame mainFrame = new MainFrame(user);
+
+                mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                        DBConnection.getInstance().closeConnection();
+                    }
+                });
+
             } else {
-                JOptionPane.showMessageDialog(null, "Invalid login/password");
+                JOptionPane.showMessageDialog(null, "Invalid login or password");
             }
         });
 
-        // REGISTER
         auth.getRegisterPanel().getRegisterButton().addActionListener(e -> {
 
             String login = auth.getRegisterPanel().getLoginField().getText();
@@ -41,11 +51,11 @@ public class Main {
             boolean ok = registerController.register(login, fullName, password);
 
             if (ok) {
-                JOptionPane.showMessageDialog(null, "Registered!");
+                JOptionPane.showMessageDialog(null, "Registered successfully!");
                 auth.showLogin();
             } else {
                 JOptionPane.showMessageDialog(null,
-                        "Weak password!");
+                        "Weak password!\nMin 8 chars, 1 digit, 1 uppercase, 1 special char");
             }
         });
     }

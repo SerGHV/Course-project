@@ -6,6 +6,7 @@ import controller.SupplierController;
 import model.Part;
 import model.Price;
 import model.Supplier;
+import model.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,11 +20,11 @@ public class PricePanel extends JPanel {
     private PriceController controller;
     private JTable table;
     private DefaultTableModel model;
-    private JButton loadButton, addButton, deleteButton;
+    private JButton loadButton, addButton, deleteButton, updateButton;
     private JComboBox<Supplier> supplierBox;
     private JComboBox<Part> partBox;
 
-    public PricePanel() {
+    public PricePanel(User user) {
         controller = new PriceController();
         setLayout(new BorderLayout());
 
@@ -48,9 +49,11 @@ public class PricePanel extends JPanel {
         loadButton = new JButton("Load");
         addButton = new JButton("Add");
         deleteButton = new JButton("Delete");
+        updateButton = new JButton("Update");
         buttons.add(loadButton);
         buttons.add(addButton);
         buttons.add(deleteButton);
+        buttons.add(updateButton);
 
         add(top, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -82,6 +85,33 @@ public class PricePanel extends JPanel {
                 controller.deletePrice(id);
                 loadData();
             }
+        });
+
+        updateButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Select a price.");
+                return;
+            }
+            Price price = new Price();
+            price.setPriceId((Integer) model.getValueAt(row, 0));
+
+            String supplierIdStr = JOptionPane.showInputDialog("Supplier ID:", model.getValueAt(row, 1));
+            if (supplierIdStr == null || supplierIdStr.isBlank()) return;
+            String partIdStr = JOptionPane.showInputDialog("Part ID:", model.getValueAt(row, 2));
+            if (partIdStr == null || partIdStr.isBlank()) return;
+            String dateStr = JOptionPane.showInputDialog("Date (YYYY-MM-DD):", model.getValueAt(row, 3));
+            if (dateStr == null || dateStr.isBlank()) return;
+            String priceStr = JOptionPane.showInputDialog("Price:", model.getValueAt(row, 4));
+            if (priceStr == null || priceStr.isBlank()) return;
+
+            price.setSupplierId(Integer.parseInt(supplierIdStr));
+            price.setPartId(Integer.parseInt(partIdStr));
+            price.setPriceDate(Date.valueOf(dateStr));
+            price.setPriceValue(new BigDecimal(priceStr));
+
+            controller.updatePrice(price);
+            loadData();
         });
     }
 

@@ -28,4 +28,8 @@ public class DeliveryController {
     public void deleteDelivery(int id) {
         repository.delete(id);
     }
+
+    public void updateDelivery(Delivery delivery) {
+        repository.update(delivery);
+    }
 }

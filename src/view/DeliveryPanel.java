@@ -4,6 +4,7 @@ import controller.DeliveryController;
 import controller.SupplierController;
 import model.Delivery;
 import model.Supplier;
+import model.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,14 +17,13 @@ public class DeliveryPanel extends JPanel {
     private DeliveryController controller;
     private JTable table;
     private DefaultTableModel model;
-    private JButton loadButton, addButton, deleteButton;
+    private JButton loadButton, addButton, deleteButton, updateButton;
     private JComboBox<Supplier> supplierBox;
 
-    public DeliveryPanel() {
+    public DeliveryPanel(User user) {
         controller = new DeliveryController();
         setLayout(new BorderLayout());
 
-        // Заполняем ComboBox поставщиками
         supplierBox = new JComboBox<>();
         SupplierController supplierController = new SupplierController();
         for (Supplier s : supplierController.getAllSuppliers()) {
@@ -41,9 +41,11 @@ public class DeliveryPanel extends JPanel {
         loadButton = new JButton("Load");
         addButton = new JButton("Add");
         deleteButton = new JButton("Delete");
+        updateButton = new JButton("Update");
         buttons.add(loadButton);
         buttons.add(addButton);
         buttons.add(deleteButton);
+        buttons.add(updateButton);
 
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -70,6 +72,27 @@ public class DeliveryPanel extends JPanel {
                 controller.deleteDelivery(id);
                 loadData();
             }
+        });
+
+        updateButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Select a delivery.");
+                return;
+            }
+            Delivery delivery = new Delivery();
+            delivery.setDeliveryId((Integer) model.getValueAt(row, 0));
+
+            String supplierIdStr = JOptionPane.showInputDialog("Supplier ID:", model.getValueAt(row, 1));
+            if (supplierIdStr == null || supplierIdStr.isBlank()) return;
+            String dateStr = JOptionPane.showInputDialog("Date (YYYY-MM-DD):", model.getValueAt(row, 2));
+            if (dateStr == null || dateStr.isBlank()) return;
+
+            delivery.setSupplierId(Integer.parseInt(supplierIdStr));
+            delivery.setDeliveryDate(Date.valueOf(dateStr));
+
+            controller.updateDelivery(delivery);
+            loadData();
         });
     }
 

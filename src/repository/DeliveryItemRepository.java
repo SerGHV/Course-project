@@ -108,4 +108,18 @@ public class DeliveryItemRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(DeliveryItem item) {
+        String sql = "UPDATE delivery_items SET delivery_id = ?, price_id = ?, part_id = ?, quantity = ? WHERE delivery_item_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, item.getDeliveryId());
+            ps.setInt(2, item.getPriceId());
+            ps.setInt(3, item.getPartId());
+            ps.setInt(4, item.getQuantity());
+            ps.setInt(5, item.getDeliveryItemId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

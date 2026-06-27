@@ -98,4 +98,28 @@ public class SupplierRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(Supplier supplier) {
+
+        String sql = """
+            UPDATE suppliers
+            SET supplier_name = ?,
+                address = ?,
+                phone_number = ?
+            WHERE supplier_id = ?
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, supplier.getSupplierName());
+            ps.setString(2, supplier.getAddress());
+            ps.setString(3, supplier.getPhoneNumber());
+            ps.setInt(4, supplier.getSupplierId());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

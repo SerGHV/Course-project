@@ -146,4 +146,28 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(User user) {
+
+        String sql = """
+            UPDATE users
+            SET login = ?,
+                password_hash = ?,
+                full_name = ?
+            WHERE user_id = ?
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, user.getLogin());
+            ps.setString(2, user.getPasswordHash());
+            ps.setString(3, user.getFullName());
+            ps.setInt(4, user.getUserId());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

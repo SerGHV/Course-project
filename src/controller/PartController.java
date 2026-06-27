@@ -28,4 +28,8 @@ public class PartController {
     public void deletePart(int id) {
         repository.delete(id);
     }
+
+    public void updatePart(Part part) {
+        repository.update(part);
+    }
 }

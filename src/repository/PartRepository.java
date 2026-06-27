@@ -98,4 +98,16 @@ public class PartRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(Part part) {
+        String sql = "UPDATE parts SET part_name = ?, article_number = ? WHERE part_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, part.getPartName());
+            ps.setString(2, part.getArticleNumber());
+            ps.setInt(3, part.getPartId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

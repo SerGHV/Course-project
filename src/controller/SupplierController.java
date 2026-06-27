@@ -28,4 +28,8 @@ public class SupplierController {
     public void deleteSupplier(int id) {
         repository.delete(id);
     }
+
+    public void updateSupplier(Supplier supplier) {
+        repository.update(supplier);
+    }
 }

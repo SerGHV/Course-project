@@ -8,6 +8,7 @@ import model.Delivery;
 import model.DeliveryItem;
 import model.Part;
 import model.Price;
+import model.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,12 +20,12 @@ public class DeliveryItemPanel extends JPanel {
     private DeliveryItemController controller;
     private JTable table;
     private DefaultTableModel model;
-    private JButton loadButton, addButton, deleteButton;
+    private JButton loadButton, addButton, deleteButton, updateButton;
     private JComboBox<Delivery> deliveryBox;
     private JComboBox<Price> priceBox;
     private JComboBox<Part> partBox;
 
-    public DeliveryItemPanel() {
+    public DeliveryItemPanel(User user) {
         controller = new DeliveryItemController();
         setLayout(new BorderLayout());
 
@@ -54,9 +55,11 @@ public class DeliveryItemPanel extends JPanel {
         loadButton = new JButton("Load");
         addButton = new JButton("Add");
         deleteButton = new JButton("Delete");
+        updateButton = new JButton("Update");
         buttons.add(loadButton);
         buttons.add(addButton);
         buttons.add(deleteButton);
+        buttons.add(updateButton);
 
         add(top, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
@@ -87,6 +90,33 @@ public class DeliveryItemPanel extends JPanel {
                 controller.deleteDeliveryItem(id);
                 loadData();
             }
+        });
+
+        updateButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(this, "Select an item.");
+                return;
+            }
+            DeliveryItem item = new DeliveryItem();
+            item.setDeliveryItemId((Integer) model.getValueAt(row, 0));
+
+            String deliveryIdStr = JOptionPane.showInputDialog("Delivery ID:", model.getValueAt(row, 1));
+            if (deliveryIdStr == null || deliveryIdStr.isBlank()) return;
+            String priceIdStr = JOptionPane.showInputDialog("Price ID:", model.getValueAt(row, 2));
+            if (priceIdStr == null || priceIdStr.isBlank()) return;
+            String partIdStr = JOptionPane.showInputDialog("Part ID:", model.getValueAt(row, 3));
+            if (partIdStr == null || partIdStr.isBlank()) return;
+            String qtyStr = JOptionPane.showInputDialog("Quantity:", model.getValueAt(row, 4));
+            if (qtyStr == null || qtyStr.isBlank()) return;
+
+            item.setDeliveryId(Integer.parseInt(deliveryIdStr));
+            item.setPriceId(Integer.parseInt(priceIdStr));
+            item.setPartId(Integer.parseInt(partIdStr));
+            item.setQuantity(Integer.parseInt(qtyStr));
+
+            controller.updateDeliveryItem(item);
+            loadData();
         });
     }
 

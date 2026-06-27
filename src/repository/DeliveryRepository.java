@@ -102,4 +102,16 @@ public class DeliveryRepository {
             e.printStackTrace();
         }
     }
+
+    public void update(Delivery delivery) {
+        String sql = "UPDATE deliveries SET supplier_id = ?, delivery_date = ? WHERE delivery_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, delivery.getSupplierId());
+            ps.setDate(2, delivery.getDeliveryDate());
+            ps.setInt(3, delivery.getDeliveryId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

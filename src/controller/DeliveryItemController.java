@@ -28,4 +28,6 @@ public class DeliveryItemController {
     public void deleteDeliveryItem(int id) {
         repository.delete(id);
     }
+
+    public void updateDeliveryItem(DeliveryItem item) { repository.update(item); }
 }
